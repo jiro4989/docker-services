@@ -9,9 +9,16 @@ services:
       - "8000:80"
     volumes:
       - "./apache2/httpd.conf:/etc/apache2/httpd.conf"
+
+  curltest:
+    build: ./dockerfiles/curltest
+    container_name: curltest
+    tty: true
+
   api:
     build: dockerfiles/api
     container_name: api
     tty: true
     expose:
       - 8888
+
