@@ -1,66 +1,17 @@
-= load_balancing
+= simple
 
-Dockerコンテナで単純なWebアプリを組む。
+Proxy Serverとしてのhttpdコンテナと
+GoによるAPIサーバ（ダミーデータを返すだけ）を連携する練習。
 
-== 作るもの
-
-* TODOリスト
-* 管理者画面はなし
-* 2名のアカウントを作る
-* 画面UIは極限まで手抜き
-
-== サービス構成
-
-* Web
-** web1
-* Application
-** app1
-* Database
-** db1
-
-=== Web
-
-httpdを使用してプロキシーサーバとして運用する。
-
-=== Application
-
-PythonのDjangoをば。
-
-=== Database
-
-MySQLコンテナ。
-
-== テーブル定義
-
-.user
-[options="header]
-|================
-|field|type|primary_key
-|id|int|true
-|name|varchar(255)|
-|password|varchar(16)|
-|================
-
-.todo
-[options="header]
-|================
-|field|type|primary_key
-|id|int|true
-|user_id|int|true
-|task|varchar(255)|
-|================
-
-== 参考リンク
-
-* https://qiita.com/gragragrao/items/373057783ba8856124f3[Djangoを最速でマスターする]
-* https://qiita.com/kyhei_0727/items/e0eb4cfa46d71258f1be[DjangoをDocker Composeでupしよう！]
-
-
-
+== アプリの起動
 
 [source,bash]
+----
+docker-compose build --no-cache
+docker-compose up
 curl http://localhost:8000/
-
+curl http://localhost:8000/api/hoge
+----
 
 == 作業メモ
 
@@ -186,3 +137,6 @@ Server compiled with....
 * `HTTPD_ROOT=/etc/httpd`
 * `SERVER_CONFIG_FILE=conf/httpd.conf`
 
+== 参考
+
+* https://weblabo.oscasierra.net/tomcat-mod-proxy-ajp/[Apache httpd と Tomcat を連携させる方法]
