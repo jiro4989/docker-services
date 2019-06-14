@@ -60,3 +60,129 @@ MySQLコンテナ。
 
 [source,bash]
 curl http://localhost:8000/
+
+
+== 作業メモ
+
+/etc/apache2/httpd.confという感じにホストPCの設定ファイルをマウントしてもだめだ
+ったので調査した。
+何がだめだったのか、というとすべてのHTTPリクエストをAPIサーバのJSONAPIのURLにリ
+ダイレクトする設定を入れたはずなのに、Webサーバ内のHTMLを返却していたから。
+
+httpdイメージには調査に必要なコマンドが軒並み存在しなかったので
+コンテナ内で以下のコマンドを実行した。
+
+[source,bash]
+apt update -y
+apt install -y procps vim iproute2 curl net-tools
+
+以下のコマンドでコンテナに入る。
+
+[source,bash]
+docker run -it 01_simple_web /bin/bash
+
+まずhttpdがLISTEN状態かどうかを確認
+
+[source,bash]
+ss -antu
+
+80番ポートがLISTENになっていた。
+
+次にhttpリクエストしたらどうなるか。
+
+[source,bash]
+curl http://localhost/
+curl http://localhost:80/
+
+httpdのデフォルトのHTML(It works)が返ってきた。
+
+次に設定ファイルがどこのものをロードしているのかを調べた。
+httpdの設定ファイルの場所とかを調べるのは以下のコマンド。
+これで設定ファイルの場所とか設定とかを一応調べられる。
+
+[source,bash]
+----
+# httpd -V
+
+Server version: Apache/2.4.39 (Unix)
+Server built:   Jun 11 2019 05:49:46
+Server's Module Magic Number: 20120211:84
+Server loaded:  APR 1.5.2, APR-UTIL 1.5.4
+Compiled using: APR 1.5.2, APR-UTIL 1.5.4
+Architecture:   64-bit
+Server MPM:     event
+  threaded:     yes (fixed thread count)
+    forked:     yes (variable process count)
+Server compiled with....
+ -D APR_HAS_SENDFILE
+ -D APR_HAS_MMAP
+ -D APR_HAVE_IPV6 (IPv4-mapped addresses enabled)
+ -D APR_USE_SYSVSEM_SERIALIZE
+ -D APR_USE_PTHREAD_SERIALIZE
+ -D SINGLE_LISTEN_UNSERIALIZED_ACCEPT
+ -D APR_HAS_OTHER_CHILD
+ -D AP_HAVE_RELIABLE_PIPED_LOGS
+ -D DYNAMIC_MODULE_LIMIT=256
+ -D HTTPD_ROOT="/usr/local/apache2"
+ -D SUEXEC_BIN="/usr/local/apache2/bin/suexec"
+ -D DEFAULT_PIDLOG="logs/httpd.pid"
+ -D DEFAULT_SCOREBOARD="logs/apache_runtime_status"
+ -D DEFAULT_ERRORLOG="logs/error_log"
+ -D AP_TYPES_CONFIG_FILE="conf/mime.types"
+ -D SERVER_CONFIG_FILE="conf/httpd.conf"
+----
+
+ここで以下の２つの値に気づいた。
+
+* `HTTPD_ROOT=/usr/local/apache2`
+* `SERVER_CONFIG_FILE=conf/httpd.conf`
+
+このことから設定ファイルを配置すべき起点となるディレクトリを間違えていたことに気
+づいた。(おまけにconfディレクトリも指定していない)
+
+仕事ではRedHat系のOSしかhttpdを扱ったことがなかったので
+パスを勘違いしていた。
+念の為CentOSイメージでもhttpdをインストールして値をしらべてみた。
+
+[source,bash]
+docker run -it centos:7 bash
+
+[source,bash]
+----
+# yum update -y
+# yum install -y httpd
+# httpd -V
+AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 172.17.0.3. Set the 'ServerName' directive globally to suppress this message
+Server version: Apache/2.4.6 (CentOS)
+Server built:   Apr 24 2019 13:45:48
+Server's Module Magic Number: 20120211:24
+Server loaded:  APR 1.4.8, APR-UTIL 1.5.2
+Compiled using: APR 1.4.8, APR-UTIL 1.5.2
+Architecture:   64-bit
+Server MPM:     prefork
+  threaded:     no
+    forked:     yes (variable process count)
+Server compiled with....
+ -D APR_HAS_SENDFILE
+ -D APR_HAS_MMAP
+ -D APR_HAVE_IPV6 (IPv4-mapped addresses enabled)
+ -D APR_USE_SYSVSEM_SERIALIZE
+ -D APR_USE_PTHREAD_SERIALIZE
+ -D SINGLE_LISTEN_UNSERIALIZED_ACCEPT
+ -D APR_HAS_OTHER_CHILD
+ -D AP_HAVE_RELIABLE_PIPED_LOGS
+ -D DYNAMIC_MODULE_LIMIT=256
+ -D HTTPD_ROOT="/etc/httpd"
+ -D SUEXEC_BIN="/usr/sbin/suexec"
+ -D DEFAULT_PIDLOG="/run/httpd/httpd.pid"
+ -D DEFAULT_SCOREBOARD="logs/apache_runtime_status"
+ -D DEFAULT_ERRORLOG="logs/error_log"
+ -D AP_TYPES_CONFIG_FILE="conf/mime.types"
+ -D SERVER_CONFIG_FILE="conf/httpd.conf"
+----
+
+以下のようにパスが異なっていることがわかった。
+
+* `HTTPD_ROOT=/etc/httpd`
+* `SERVER_CONFIG_FILE=conf/httpd.conf`
+

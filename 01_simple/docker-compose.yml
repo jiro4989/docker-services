@@ -8,12 +8,16 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - "./apache2/httpd.conf:/etc/apache2/httpd.conf"
+      - "./apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf"
+    depends_on:
+      - api
 
   curltest:
     build: ./dockerfiles/curltest
     container_name: curltest
     tty: true
+    depends_on:
+      - api
 
   api:
     build: dockerfiles/api
