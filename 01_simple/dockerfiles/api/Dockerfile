@@ -1,16 +1,14 @@
 FROM golang:1.12.5-alpine3.9 as build-stage
 
-RUN go version && echo $GOPATH
-
-ENV GO111MODULE off
-RUN apk add --update git
 ENV GO111MODULE on
-
-WORKDIR /go/src/github.com/greymd/ojichat
-# COPY Makefile /go/src/github.com/greymd/ojichat
-RUN make
+RUN go version \
+    && echo $GOPATH \
+    && apk add --no-cache git \
+    && git clone https://github.com/jiro4989/docker-services /root/go/src/github.com/jiro4989/docker-services \
+    && cd /root/go/src/github.com/jiro4989/docker-services/01_simple/app \
+    && go build -o /usr/local/bin/app .
 
 FROM alpine:latest as exec-stage
-COPY --from=build-stage /go/src/github.com/greymd/ojichat/bin/ojichat /usr/local/bin/
+COPY --from=build-stage /usr/local/bin/app /usr/local/bin/
 
-ENTRYPOINT ["/usr/local/bin/ojichat"]
+ENTRYPOINT ["/usr/local/bin/app"]
