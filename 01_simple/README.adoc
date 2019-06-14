@@ -54,3 +54,9 @@ MySQLコンテナ。
 
 * https://qiita.com/gragragrao/items/373057783ba8856124f3[Djangoを最速でマスターする]
 * https://qiita.com/kyhei_0727/items/e0eb4cfa46d71258f1be[DjangoをDocker Composeでupしよう！]
+
+
+
+
+[source,bash]
+curl http://localhost:8000/

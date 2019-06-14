@@ -5,7 +5,13 @@ services:
     image: httpd
     container_name: web
     tty: true
+    ports:
+      - "8000:80"
+    volumes:
+      - "./apache2/httpd.conf:/etc/apache2/httpd.conf"
   api:
     build: dockerfiles/api
     container_name: api
     tty: true
+    expose:
+      - 8888
