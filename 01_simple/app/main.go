@@ -12,9 +12,16 @@ type JSONData struct {
 	Data string `json:"data"`
 }
 
-func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func Index(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
 	data := JSONData{
-		Data: "Hello World",
+		Data: "Index",
+	}
+	json.NewEncoder(w).Encode(data)
+}
+
+func Param(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
+	data := JSONData{
+		Data: "Hello World. Param = " + param.ByName("param"),
 	}
 	json.NewEncoder(w).Encode(data)
 }
@@ -22,6 +29,7 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 func main() {
 	router := httprouter.New()
 	router.GET("/", Index)
+	router.GET("/api/:param", Param)
 
 	log.Fatal(http.ListenAndServe(":8888", router))
 }
