@@ -25,6 +25,7 @@ type DeleteResult struct {
 
 // moneyをDBに追加する
 func Insert(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
+	log.Println("Insert: ", param)
 	errData := InsertResult{
 		InsertedID: -1,
 		Money:      -1,
@@ -52,6 +53,7 @@ func Insert(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
 
 // idでレコードを削除する
 func Delete(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
+	log.Println("Delete: ", param)
 	errData := DeleteResult{
 		DeletedID: -1,
 	}
@@ -77,6 +79,7 @@ func Delete(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
 
 // moneyの集計結果を返却する
 func Top(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
+	log.Println("Top: ", param)
 	db := newDB(driverName, dataSourceName)
 	money, err := db.fetchMoney()
 	if err != nil {
