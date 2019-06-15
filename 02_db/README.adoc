@@ -1,0 +1,33 @@
+= simple
+
+01_sampleでは固定のダミーデータを返却するだけだったので
+DBコンテナのデータにアクセスして返却するようにする。
+トランザクションとかについては今回は考慮しない。
+テストしやすいかどうか、とかも今回は考慮しない。
+
+== コンテナ構成
+
+* web
+* api
+* db
+
+image:img/network.svg[Network]
+
+== アプリの起動
+
+[source,bash]
+----
+docker-compose build --no-cache
+docker-compose up
+curl http://localhost:8000/
+curl http://localhost:8000/api/hoge
+----
+
+== 作業メモ
+
+あれば書く
+
+== 参考
+
+* https://weblabo.oscasierra.net/tomcat-mod-proxy-ajp/[Apache httpd と Tomcat を連携させる方法]
+* https://qiita.com/taizo/items/54f5f49c6102f86194b8[GoでMySQLに接続する]

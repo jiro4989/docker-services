@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  web:
+    image: httpd
+    container_name: 02_web
+    tty: true
+    ports:
+      - "8000:80"
+    volumes:
+      - "./apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf"
+    depends_on:
+      - api
+
+  api:
+    build: dockerfiles/api
+    container_name: 02_api
+    tty: true
+    expose:
+      - 8888
+
+  db:
+    image: mysql:8
+    container_name: 02_db
+    environment:
+      MYSQL_DATABASE: my_db
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    expose:
+      - 3306
+
