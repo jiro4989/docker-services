@@ -9,7 +9,7 @@ GoによるAPIサーバ（ダミーデータを返すだけ）を連携する練
 * api
 * curltest (ただのテスト用)
 
-image:: img/network.svg
+image:img/network.svg[Network]
 
 == アプリの起動
 
