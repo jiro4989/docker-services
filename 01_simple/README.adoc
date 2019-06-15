@@ -3,6 +3,14 @@
 Proxy Serverとしてのhttpdコンテナと
 GoによるAPIサーバ（ダミーデータを返すだけ）を連携する練習。
 
+== コンテナ構成
+
+* web
+* api
+* curltest (ただのテスト用)
+
+image:: img/network.svg
+
 == アプリの起動
 
 [source,bash]
