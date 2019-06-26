@@ -85,7 +85,7 @@ func Delete(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
 }
 
 // moneyの集計結果を返却する
-func Money(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
+func APIMoney(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
 	log.Println("Money: ", param)
 	setHeader(w)
 	db := newDB(driverName, dataSourceName)
@@ -101,7 +101,7 @@ func main() {
 	router := httprouter.New()
 	router.GET("/api/insert/:money", Insert)
 	router.GET("/api/delete/:id", Delete)
-	router.GET("/api/money", Money)
+	router.GET("/api/money", APIMoney)
 
 	log.Fatal(http.ListenAndServe(":8888", router))
 }
