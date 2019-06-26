@@ -11,7 +11,7 @@ webコンテナからリバースプロキシを使用してAPIサーバに負�
 * api
 * db
 
-image:img/network.svg[Network]
+image:img/network.png[Network]
 
 == 画面描画までのデータの流れ
 
