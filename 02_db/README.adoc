@@ -19,13 +19,30 @@ image:img/network.svg[Network]
 ----
 docker-compose build --no-cache
 docker-compose up
-curl http://localhost:8000/
-curl http://localhost:8000/api/hoge
+----
+
+APIにリクエストする。
+
+[source,bash]
+----
+curl http://localhost:8000/api/top
+curl http://localhost:8000/api/insert/1234
+curl http://localhost:8000/api/delete/1
 ----
 
 == 作業メモ
 
-あれば書く
+MySQL 8は認証方式が変わったらしい。
+/etc/mysql/conf/default_authentication.cnfを配置していないと、initdbのSQLは実行
+されなかった。
+
+JSON APIとしてデータを返す必要があったので、ヘッダのコンテンツタイプを変更するよ
+うにした。
+
+[source,go]
+----
+w.Header().Set("Content-Type", "application/json; charset=UTF-8") // <- Added
+----
 
 == 参考
 
