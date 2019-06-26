@@ -1,6 +1,8 @@
+use my_db;
+
 CREATE TABLE money (
     PRIMARY KEY (id),
-    id   INT(8) NOT NULL AUTOINCREMENT,
+    id   INT(8) NOT NULL AUTO_INCREMENT,
     data INT(8) NOT NULL
 );
 

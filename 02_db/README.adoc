@@ -1,4 +1,4 @@
-= simple
+= 02_db
 
 01_sampleでは固定のダミーデータを返却するだけだったので
 DBコンテナのデータにアクセスして返却するようにする。
@@ -31,3 +31,4 @@ curl http://localhost:8000/api/hoge
 
 * https://weblabo.oscasierra.net/tomcat-mod-proxy-ajp/[Apache httpd と Tomcat を連携させる方法]
 * https://qiita.com/taizo/items/54f5f49c6102f86194b8[GoでMySQLに接続する]
+* https://qiita.com/juhn/items/274e44ee80354a39d872[docker-compose＋MySQL5.7(8.0も)+初期化+永続化]

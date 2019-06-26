@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -69,6 +70,7 @@ func (d DB) fetchMoney() ([]Money, error) {
 		if err := rows.Scan(&id, &data); err != nil {
 			return nil, err
 		}
+		log.Println("id:", id, ",data:", data)
 		m := Money{id: id, data: data}
 		money = append(money, m)
 	}
