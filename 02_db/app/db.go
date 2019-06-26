@@ -13,7 +13,7 @@ type DB struct {
 }
 
 type Money struct {
-	id, data int
+	ID, Data int
 }
 
 func newDB(driverName, dataSourceName string) DB {
@@ -71,7 +71,7 @@ func (d DB) fetchMoney() ([]Money, error) {
 			return nil, err
 		}
 		log.Println("id:", id, ",data:", data)
-		m := Money{id: id, data: data}
+		m := Money{ID: id, Data: data}
 		money = append(money, m)
 	}
 
