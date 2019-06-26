@@ -5,6 +5,8 @@ services:
     image: httpd
     container_name: 03_web
     tty: true
+    ports:
+      - "8000:80"
     volumes:
       - "./web/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro"
       - "./web/www:/var/www:ro"
