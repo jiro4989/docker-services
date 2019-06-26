@@ -54,6 +54,27 @@ httpd.confにErrorLogとCustomLogというログの出力先を指定する設�
 /proc/self/fd/1(標準出力)と/proc/self/fd/2(標準エラー出力)に出力するように修正し
 てこの問題を解消した。
 
+=== ログの出力方法の設定
+
+dockerの場合はdockerコマンドのオプションから指定する。
+docker-composeの場合はYAMLファイルに以下のように設定を書く。
+今回は外部のログ環境を整えるのが面倒だったので割愛する。
+もしやるならrsyslogかfluentdだろうなぁ、とは思う。
+
+[source,yaml]
+----
+version: "3"
+services:
+  hello:
+    image: "hello-world:latest"
+    logging:
+      driver: "json-file" # defaults if not specified
+      options:
+        max-size: "10m"
+        max-file: "3"
+----
+
 == 参考
 
 * https://qiita.com/HommaHomma/items/f943fa3397bc3f386057[Docker調査 ログ編]
+* https://qiita.com/hidekuro/items/b1c7ce58c9d9fe342907[Dockerコンテナのログは標準オプションでローテートできる]
