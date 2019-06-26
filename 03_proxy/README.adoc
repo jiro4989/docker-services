@@ -12,6 +12,10 @@ APIリクエストには非同期処理を使用する。
 
 image:img/network.svg[Network]
 
+== 画面描画までのデータの流れ
+
+image:img/draw_index.svg[Sequence]
+
 == アプリの起動
 
 [source,bash]
