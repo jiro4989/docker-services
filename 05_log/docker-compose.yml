@@ -6,7 +6,6 @@ services:
     tty: true
     volumes:
       - "./proxy/conf.d:/etc/nginx/conf.d:ro"
-        #- "./proxy/conf.d/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro"
     depends_on:
       - web
     ports:
@@ -40,4 +39,3 @@ services:
     expose:
       - 3306
     tty: true
-
