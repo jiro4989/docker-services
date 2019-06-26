@@ -23,8 +23,14 @@ type DeleteResult struct {
 	DeletedID int64 `json:"deletedID"`
 }
 
+func setHeader(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8") // <- Added
+}
+
 // moneyをDBに追加する
 func Insert(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
+	setHeader(w)
+
 	log.Println("Insert: ", param)
 	errData := InsertResult{
 		InsertedID: -1,
@@ -54,6 +60,7 @@ func Insert(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
 // idでレコードを削除する
 func Delete(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
 	log.Println("Delete: ", param)
+	setHeader(w)
 	errData := DeleteResult{
 		DeletedID: -1,
 	}
@@ -80,6 +87,7 @@ func Delete(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
 // moneyの集計結果を返却する
 func Top(w http.ResponseWriter, r *http.Request, param httprouter.Params) {
 	log.Println("Top: ", param)
+	setHeader(w)
 	db := newDB(driverName, dataSourceName)
 	money, err := db.fetchMoney()
 	if err != nil {
