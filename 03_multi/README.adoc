@@ -1,0 +1,39 @@
+= 02_db
+
+TDOO
+
+== コンテナ構成
+
+* web
+* api
+* db
+
+image:img/network.svg[Network]
+
+== アプリの起動
+
+[source,bash]
+----
+docker-compose build --no-cache
+docker-compose up
+----
+
+APIにリクエストする。
+
+[source,bash]
+----
+curl http://localhost:8000/api/top
+curl http://localhost:8000/api/insert/1234
+curl http://localhost:8000/api/delete/1
+----
+
+== 作業メモ
+
+あればかく
+
+== 参考
+
+* https://qiita.com/South_/items/7bdb1f373410cb1c907b[Dockerサービスの簡単リバースプロキシ]
+* https://qiita.com/growsic/items/fead30272a5fa374ac7b[リバースプロキシって何？触りだけ学んだサーバー/インフラ入門]
+
+
