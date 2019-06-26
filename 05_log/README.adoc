@@ -1,12 +1,11 @@
-= 04_multi
+= 05_log
 
-負荷分散できるようにする。
-nginxコンテナからリバースプロキシを使用してWebサーバに負荷分散する。
-webコンテナからリバースプロキシを使用してAPIサーバに負荷分散する。
+docker-compose logsにログが記録されないのを解消して、docker-compose logsから全部
+のログを確認できるようにする。あとはそのログを永続化する方法を確立する。
 
 == コンテナ構成
 
-* proxy (new)
+* proxy
 * web
 * api
 * db
@@ -46,25 +45,15 @@ curl http://localhost:8000/api/delete/1
 
 == 作業メモ
 
-=== nginxの設定
+=== ログを標準出力とエラー出力に出力するように設定を修正
 
-`docker run -it nginx bash` でコンテナに入って設定ファイル
-(/etc/nginx/conf.d/defautl.conf)を確認した。
-この設定を残しつつ/etc/nginx/conf.d/proxy.confを追加するように配置しても設定が反
-映されていないように見えた。
+httpd.confにErrorLogとCustomLogというログの出力先を指定する設定がある。
+どこかからコピペしてきたときに、この設定でログファイルに書き込むようにしてしまっ
+ていた。
 
-default.confが存在すると先にそっちを参照しているのかもしれない。
-
-今回はconf.dをまるごとマウントするようにして、default.confがコンテナ内に残らない
-ようにして解決した。
-
-=== scaleするときはcontainer_name設定をYAMLから消す
-
-`docker-compose scale web=4` とかってやればコンテナを複数起動できるみたい。
-ただしそれをやるときはコンテナ名を固定する `container_name` という設定をYAMLから
-外さないといけない。コンテナ名がコンフリクトしてエラーで起動できない。
+/proc/self/fd/1(標準出力)と/proc/self/fd/2(標準エラー出力)に出力するように修正し
+てこの問題を解消した。
 
 == 参考
 
-* https://qiita.com/Esfahan/items/91f01368a37abf83cf25[docker-compose + リバースプロキシ + ロードバランシングの環境構築手順]
-* https://www.nedia.ne.jp/blog/tech/2016/08/04/7938#Nginx-2[Nginxのロードバランシング機能を使ってみよう！]
+なし
