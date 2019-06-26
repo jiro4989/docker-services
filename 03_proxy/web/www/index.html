@@ -6,6 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>03_proxy</title>
+    <script>
+        const bodyId = "moneyTableBody";
+        function clearBody() {
+            let table = document.getElementById(bodyId);
+            while (table.firstChild) {
+                table.removeChild(table.firstChild);
+            }
+        }
+
+        function appendMoney(money) {
+            let body = document.getElementById(bodyId);
+            for (let m of money) {
+                let row = document.createElement("tr");
+
+                let idTd = document.createElement("td");
+                idTd.innerHTML = m.ID;
+                row.appendChild(idTd);
+
+                let dataTd = document.createElement("td");
+                dataTd.innerHTML = m.Data;
+                row.appendChild(dataTd);
+
+                body.appendChild(row);
+            }
+        }
+
+        async function fetchMoney() {
+            const resp = await fetch("api/money");
+            const data = await resp.json();
+            clearBody();
+            appendMoney(data);
+        }
+
+        async function insertMoney() {
+            let money = document.getElementById("insertMoneyInput").value;
+            await fetch("api/insert/" + money);
+            await fetchMoney();
+        }
+
+        async function deleteMoney() {
+            let id = document.getElementById("deleteIDInput").value;
+            await fetch("api/delete/" + id);
+            await fetchMoney();
+        }
+    </script>
 </head>
 
 <body>
@@ -16,19 +61,31 @@
         <div>
             <h2>お金一覧取得</h2>
             <p>非同期でAPIを叩いてお金を画面に描画する</p>
-            <input type="button" value="お金取得">
+            <input id="fetchButton" type="button" value="お金取得" onclick="fetchMoney();">
+            <table>
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Data</td>
+                    </tr>
+                </thead>
+                <tbody id="moneyTableBody">
+                </tbody>
+            </table>
         </div>
 
         <div>
             <h2>お金追加</h2>
             <p>お金を登録する</p>
-            <input type="button" value="お金振込">
+            <input id="insertMoneyInput" type="text" value="">
+            <input type="button" value="お金振込" onclick="insertMoney();">
         </div>
 
         <div>
             <h2>お金削除</h2>
             <p>お金を削除する</p>
-            <input type="button" value="お金削除">
+            <input id="deleteIDInput" type="text" value="">
+            <input type="button" value="お金削除" onclick="deleteMoney();" >
         </div>
     </div>
 
