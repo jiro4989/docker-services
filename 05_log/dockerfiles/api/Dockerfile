@@ -5,7 +5,7 @@ RUN go version \
     && echo $GOPATH \
     && apk add --no-cache git \
     && git clone https://github.com/jiro4989/docker-services /root/go/src/github.com/jiro4989/docker-services \
-    && cd /root/go/src/github.com/jiro4989/docker-services/04_multi/app \
+    && cd /root/go/src/github.com/jiro4989/docker-services/05_log/app \
     && go build -o /usr/local/bin/app .
 
 FROM alpine:latest as exec-stage
