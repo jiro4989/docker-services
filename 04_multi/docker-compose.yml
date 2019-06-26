@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  proxy:
+    image: nginx
+    container_name: 04_proxy
+    tty: true
+    volumes:
+      - "./proxy/conf.d/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro"
+    depends_on:
+      - web
+    ports:
+      - "8000:80"
+
+  web:
+    image: httpd
+    container_name: 04_web
+    tty: true
+    expose:
+      - 80
+    volumes:
+      - "./web/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro"
+      - "./web/www:/var/www:ro"
+    depends_on:
+      - api
+
+  api:
+    build: dockerfiles/api
+    container_name: 04_api
+    tty: true
+    expose:
+      - 8888
+
+  db:
+    image: mysql:8
+    container_name: 04_db
+    environment:
+      MYSQL_DATABASE: my_db
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ./db/sql:/docker-entrypoint-initdb.d
+      - ./db/conf.d:/etc/mysql/conf.d
+    expose:
+      - 3306
+    tty: true
+

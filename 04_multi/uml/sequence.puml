@@ -1,0 +1,32 @@
+@startuml draw_index
+
+title index.html描画までのシーケンス
+
+actor User as user
+participant Browser as browser
+participant Web as web
+participant API as api
+participant DB as db
+
+user -> browser : URLにアクセス
+browser -> web : /index.htmlのGET
+web -> browser : /index.htmlの返却
+loop for each images
+    browser -> web : 画像のリクエスト
+    web -> browser : 画像の返却
+end
+browser -> user : 画面を描画完了
+
+user -> browser : お金描画ボタンをクリック
+group 非同期処理
+    browser ->> web : /api/money GET
+    browser -> user : JS処理は完了
+    web -> api : リバースプロキシにより\nAPIサーバへリクエストを振り分け
+    api -> db : money取得
+    db -> api : レコード返却
+    api -> web : JSON返却
+    web ->> browser : JSON返却
+end
+browser -> user : 画面更新
+
+@enduml
