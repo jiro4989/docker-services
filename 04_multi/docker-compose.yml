@@ -2,19 +2,18 @@ version: '3'
 
 services:
   proxy:
-    image: nginx
-    container_name: 04_proxy
+    image: nginx:1.17
     tty: true
     volumes:
-      - "./proxy/conf.d/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro"
+      - "./proxy/conf.d:/etc/nginx/conf.d:ro"
+        #- "./proxy/conf.d/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro"
     depends_on:
       - web
     ports:
       - "8000:80"
 
   web:
-    image: httpd
-    container_name: 04_web
+    image: httpd:2.4
     tty: true
     expose:
       - 80
@@ -26,14 +25,12 @@ services:
 
   api:
     build: dockerfiles/api
-    container_name: 04_api
     tty: true
     expose:
       - 8888
 
   db:
     image: mysql:8
-    container_name: 04_db
     environment:
       MYSQL_DATABASE: my_db
       MYSQL_ROOT_PASSWORD: password
