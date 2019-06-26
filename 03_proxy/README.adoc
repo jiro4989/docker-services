@@ -39,11 +39,24 @@ curl http://localhost:8000/api/delete/1
 == 作業メモ
 
 httpdでキャッシュを利用するために以下のモジュールを読み込む。
+あとFilesでキャッシュ対象にヘッダを追加。
 
 [source,conf]
 ----
 LoadModule cache_module modules/mod_cache.so
 LoadModule cache_disk_module modules/mod_cache_disk.so
+
+<Files "/img/.*">
+    FileEtag None
+    RequestHeader unset If-Modified-Since
+    Header set Cache-Control "max-age=3600"
+</Files>
+
+CacheRoot /var/www/cache
+CacheIgnoreCacheControl On
+CacheIgnoreHeaders Set-Cookie
+CacheEnable disk /img/
+
 ----
 
 == 参考
