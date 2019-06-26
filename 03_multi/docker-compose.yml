@@ -17,7 +17,7 @@ services:
     depends_on:
       - api
     environment:
-      - VIRTUAL_HOST: web.localhost
+      VIRTUAL_HOST: web.localhost
 
   web2:
     image: httpd
@@ -28,7 +28,7 @@ services:
     depends_on:
       - api
     environment:
-      - VIRTUAL_HOST: web2.localhost
+      VIRTUAL_HOST: web2.localhost
 
   web3:
     image: httpd
@@ -39,7 +39,7 @@ services:
     depends_on:
       - api
     environment:
-      - VIRTUAL_HOST: web3.localhost
+      VIRTUAL_HOST: web3.localhost
 
   web4:
     image: httpd
@@ -50,7 +50,7 @@ services:
     depends_on:
       - api
     environment:
-      - VIRTUAL_HOST: web4.localhost
+      VIRTUAL_HOST: web4.localhost
 
   api:
     build: dockerfiles/api
