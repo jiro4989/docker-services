@@ -18,10 +18,10 @@ APIサーバがダミーデータではなくDBのデータを返すようにす
 HTMLを返すようにし、静的コンテンツのリクエストとAPIリクエストを
 httpdのプロキシでwebサーバとdbサーバに振り分ける。
 
-== 04_multi (TODO)
+== 04_multi
 
 web:api:db = 1:1:1 だったコンテナ構成を複数台構成にし、スケール容易にする。
-web:api:db = 4:2:1 にする。
+proxy:web:api:db = 1:4:2:1 にする。
 
 == 05_testable (TODO)
 
